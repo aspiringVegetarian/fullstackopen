@@ -1,29 +1,35 @@
 ```mermaid
 sequenceDiagram
-participant browser
-participant server
+participant b as Browser
+participant s as Server
 
-browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
-activate server
-server-->>browser: HTML document
-deactivate server
+b->>s: POST https://studies.cs.helsinki.fi/exampleapp/new_note with Form Data
+activate s
+Note right of b: The Server ingests the Form Data, appends the new data to the notes object, and then responds with a redirect
+s-->>b: 302 Status [Found] - Redirect to Location: /exampleapp/notes
+deactivate s
 
-browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
-activate server
-server-->>browser: the css file
-deactivate server
+b->>s: GET https://studies.cs.helsinki.fi/exampleapp/notes
+activate s
+s-->>b: 200 Status [OK] - HTML Document 
+deactivate s
 
-browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.js
-activate server
-server-->>browser: the JavaScript file
-deactivate server
+b->>s: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+activate s
+s-->>b: 200 Status [OK] - CSS File
+deactivate s
 
-Note right of browser: The browser starts executing the JavaScript code that fetches the JSON from the server
+b->>s: GET https://studies.cs.helsinki.fi/exampleapp/main.js
+activate s
+s-->>b: 200 Status [OK] - JavaScript File
+deactivate s
 
-browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
-activate server
-server-->>browser: [{ "content": "HTML is easy", "date": "2023-1-1" }, ... ]
-deactivate server
+Note right of b: The Browser starts executing the JavaScript code that fetches the JSON from the server
 
-Note right of browser: The browser executes the callback function that renders the notes
+b->>s: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+activate s
+s-->>b: 200 Status [OK] - JSON File with Format : [{ "content": "HTML is easy", "date": "2023-1-1" }, ... ]
+deactivate s
+
+Note right of b: The Browser executes the callback function that renders the notes
 ```
